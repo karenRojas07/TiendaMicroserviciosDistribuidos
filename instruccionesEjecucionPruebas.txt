@@ -1,0 +1,190 @@
+Guía de uso – APPTIENDA (API Gateway con Microservicios)
+
+Presentado por:
+
+Karen Lorena Rojas Orejuela
+
+Alexander Niño Rodríguez
+
+-------------------------Instrucciones para iniciar el proyecto-----------------
+
+Instalar dependencias en cada servicio (order-service, product-service, user-service) y en el gateway (APPTIENDA):
+
+npm install
+
+------------------Levantar un contenedor en DOCKER DESKTOP y descargar la imagen mysql:latest------------
+
+1. se creo una base de datos con el nombre tiendaApp y toda su configuracion
+
+la configuracion de esta base de datos se encuentra en el archivo .sql llamado appTiendaBD.sql 
+es muy importante importar la configuracion de la base de datos o la aplicacion fallara
+hay que tener en cuenta que la base de datos se levanto en el puerto 3313
+
+------------------Levantar los microservicios (cada uno en su carpeta):------------
+
+
+npm run dev
+
+order-service → http://localhost:3001
+
+product-service → http://localhost:3002
+
+user-service → http://localhost:3003
+
+-------------------------Levantar el API Gateway en la carpeta APPTIENDA/:-------------------------
+
+npm run dev
+
+
+Gateway disponible en → http://localhost:3000
+
+Ahora podrás consumir todos los servicios desde el puerto 3000, sin preocuparte de los puertos internos de cada microservicio.
+
+Endpoints disponibles
+
+--------------------------------------PRODUCTOS---------------------------------------------------------------
+
+Obtener lista de productos
+
+Método: GET
+
+URL: http://localhost:3000/products
+
+Crear un producto
+
+Método: POST
+
+URL: http://localhost:3000/products
+
+Body (JSON):
+
+{
+  "name": "Monitor Curvo XXXX",
+  "price": 750,
+  "stock": 15,
+  "estado": "activo"
+}
+
+
+Actualizar producto por ID (ejemplo: 4)
+
+Método: PUT
+
+URL: http://localhost:3000/products/4
+
+Body (JSON):
+
+{
+  "price": 9995000
+}
+
+
+Eliminar producto por ID (ejemplo: 4)
+
+Método: DELETE
+
+URL: http://localhost:3000/products/4
+
+----------USUARIOS--------------------
+
+Obtener lista de usuarios
+
+Método: GET
+
+URL: http://localhost:3000/users
+
+Crear un usuario
+
+Método: POST
+
+URL: http://localhost:3000/users
+
+Body (JSON):
+
+{
+  "email": "Ej@example.com",
+  "password": "ejemplo123"
+}
+
+Actualizar usuario por ID (ejemplo: 3)
+
+Método: PUT
+
+URL: http://localhost:3000/users/1
+
+Body (JSON):
+
+{
+  "email ": "frank"
+}
+
+
+Eliminar usuario por ID (ejemplo: 3)
+
+Método: DELETE
+
+URL: http://localhost:3000/users/1
+
+Login de usuario (autenticación con token)
+
+Método: POST
+
+URL: http://localhost:3000/users/login
+
+Body (JSON):
+
+{
+  "email": "Andres@gmail.com",
+  "password": "aksjakjslak"
+}
+
+
+La respuesta incluirá un token JWT.
+
+Para acceder a rutas protegidas (ejemplo GET /users), añade el header:
+
+Authorization: Bearer <token>
+
+-------------------Órdenes (ORDERS)----------------------------
+
+(ejemplo básico con repositorio en memoria)
+
+Obtener lista de órdenes
+
+Método: GET
+
+URL: http://localhost:3000/orders
+
+Crear una orden
+
+Método: POST
+
+URL: http://localhost:3000/orders
+
+Body (JSON):
+
+{
+  "productId": 2,
+  "quantity": 5
+}
+
+
+Obtener orden por ID (ejemplo: 1)
+
+Método: GET
+
+URL: http://localhost:3000/orders/1
+
+Eliminar orden por ID (ejemplo: 1)
+
+Método: DELETE
+
+URL: http://localhost:3000/orders/1
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+base de datos
+docker pull mcr.microsoft.com/mssql/server:latest //descargar imagen
+docker run -d --name mysqlTienda -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=sa -e MYSQL_PASSWORD=root -e MYSQL_DATABASE=tiendaApp -p 3007:3306 mysql:latest
+mysql -u root -p //entrar modo cliente
