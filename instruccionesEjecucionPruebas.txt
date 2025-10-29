@@ -18,8 +18,15 @@ npm install
 
 la configuracion de esta base de datos se encuentra en el archivo .sql llamado appTiendaBD.sql 
 es muy importante importar la configuracion de la base de datos o la aplicacion fallara
-hay que tener en cuenta que la base de datos se levanto en el puerto 3313
-
+hay que tener en cuenta que la base de datos se levanto en el puerto 3007
+1. en docker desktop hacer pull a una imagen mysql:latest
+2. levantar un contenedor con la imagen descargada de la base de datos con el siguiente comando
+docker run -d --name mysqlTienda -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=sa -e MYSQL_PASSWORD=root -e MYSQL_DATABASE=tiendaApp -p 3007:3306 mysql:latest
+3. ingresar al modo cliente
+mysql -u root -p 
+4. ingresar la clave 
+root
+5. ejecutar la configuracion de la base de datos que esta en el archivo appTiendaBD
 ------------------Levantar los microservicios (cada uno en su carpeta):------------
 
 
@@ -180,11 +187,3 @@ Eliminar orden por ID (ejemplo: 1)
 Método: DELETE
 
 URL: http://localhost:3000/orders/1
-
-
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-base de datos
-docker pull mcr.microsoft.com/mssql/server:latest //descargar imagen
-docker run -d --name mysqlTienda -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=sa -e MYSQL_PASSWORD=root -e MYSQL_DATABASE=tiendaApp -p 3007:3306 mysql:latest
-mysql -u root -p //entrar modo cliente
