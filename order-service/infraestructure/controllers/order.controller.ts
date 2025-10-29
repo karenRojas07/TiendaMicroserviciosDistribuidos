@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { OrderService } from "../service/order.service";
+import { OrderService } from "../../application/order.service";
 
 export class OrderController {
   constructor(private service: OrderService) {}

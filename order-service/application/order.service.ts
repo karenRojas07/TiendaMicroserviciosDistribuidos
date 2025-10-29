@@ -1,5 +1,5 @@
-import { Order } from "../models/order";
-import { OrderRepository } from "../repositories/order.repository.port";
+import { Order } from "../domain/order";
+import { OrderRepository } from "../domain/order.repository.port";
 
 export class OrderService {
   constructor(private repository: OrderRepository) {}

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { OrderController } from "../controllers/order.controller";
-import { OrderService } from "../service/order.service";
+import { OrderService } from "../../application/order.service";
 import {  SQLiteOrderRepository } from "../repositories/inMemoryOrder.repository";
 const router = Router();
 

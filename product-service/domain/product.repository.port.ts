@@ -1,5 +1,5 @@
 // Puerto de salida (Output Port): Define la interfaz para el repositorio
-import type { Product } from '../models/productInterface';
+import type { Product } from './productInterface';
 
 export interface ProductRepositoryPort {
   getAll(): Promise<Product[]>;

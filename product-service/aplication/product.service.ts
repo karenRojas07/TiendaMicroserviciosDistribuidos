@@ -1,5 +1,5 @@
-import type { Product } from '../models/productInterface.js';
-import type { ProductRepositoryPort } from '../repositories/product.repository.port.js';
+import type { Product } from '../infraestructure/models/productInterface.js';
+import type { ProductRepositoryPort } from '../domain/product.repository.port.js';
 
 class ProductService {
   private repository: ProductRepositoryPort;

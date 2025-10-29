@@ -1,5 +1,5 @@
-import Product from '../models/productEntity';
-import type { ProductRepositoryPort } from './product.repository.port';
+import Product from './productEntity';
+import type { ProductRepositoryPort } from '../../domain/product.repository.port';
 
 class ProductRepository implements ProductRepositoryPort {
   // Obtener todos los productos

@@ -1,6 +1,6 @@
 import express from "express";
-import orderRoutes from "./routers/order.routes";
-import { initDb } from './db/init'; // Importa la función de sincronización de la base de datos
+import orderRoutes from "./infraestructure/routers/order.routes";
+import { initDb } from './infraestructure/db/init'; // Importa la función de sincronización de la base de datos
 
 
 const app = express();

@@ -1,5 +1,5 @@
 import { Order, OrderCreationAttributes } from '../models/orderEntity';
-import { OrderRepository } from './order.repository.port';
+import { OrderRepository } from '../../domain/order.repository.port';
 
 export class SQLiteOrderRepository implements OrderRepository {
   async findAll(): Promise<Order[]> {

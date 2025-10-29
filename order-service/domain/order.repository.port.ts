@@ -1,5 +1,5 @@
-import { Order } from "../models/order";
-import { OrderCreationAttributes } from "../models/orderEntity";
+import { Order } from "./order";
+import { OrderCreationAttributes } from "../infraestructure/models/orderEntity";
 
 export interface OrderRepository {
   findAll(): Promise<Order[]>;
