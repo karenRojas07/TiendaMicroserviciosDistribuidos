@@ -1,31 +1,25 @@
-import { Order } from "../models/order";
-import { OrderRepository } from "./order.repository.port";
+import { Order, OrderCreationAttributes } from '../models/orderEntity';
+import { OrderRepository } from './order.repository.port';
 
-export class InMemoryOrderRepository implements OrderRepository {
-  private orders: Order[] = [];
-  private nextId = 1;
-
+export class SQLiteOrderRepository implements OrderRepository {
   async findAll(): Promise<Order[]> {
-    return Promise.resolve(this.orders);
+    return Order.findAll(); // Uso de Sequelize para obtener todas las órdenes
   }
 
   async findById(id: number): Promise<Order | null> {
-    const order = this.orders.find((o) => o.id === id);
-    return Promise.resolve(order ?? null);
+    return Order.findByPk(id); // Buscar por clave primaria (id)
   }
 
-  async create(order: Order): Promise<Order> {
-    const newOrder = {
-      ...order,
-      id: this.nextId++,
-    };
-    this.orders.push(newOrder);
-    return Promise.resolve(newOrder);
+  async create(order: OrderCreationAttributes): Promise<Order> {
+    return Order.create(order); // Crear una nueva orden con el tipo adecuado
   }
 
   async delete(id: number): Promise<boolean> {
-    const initialLength = this.orders.length;
-    this.orders = this.orders.filter((o) => o.id !== id);
-    return Promise.resolve(this.orders.length < initialLength);
+    const order = await Order.findByPk(id); // Buscar la orden
+    if (order) {
+      await order.destroy(); // Eliminar la orden
+      return true;
+    }
+    return false;
   }
 }

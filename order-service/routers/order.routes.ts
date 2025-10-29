@@ -1,11 +1,10 @@
 import { Router } from "express";
 import { OrderController } from "../controllers/order.controller";
 import { OrderService } from "../service/order.service";
-import { MySqlOrderRepository } from "../repositories/mysqlOrder.repository";
-
+import {  SQLiteOrderRepository } from "../repositories/inMemoryOrder.repository";
 const router = Router();
 
-const repository = new MySqlOrderRepository();
+const repository = new SQLiteOrderRepository();
 const service = new OrderService(repository);
 const controller = new OrderController(service);
 
