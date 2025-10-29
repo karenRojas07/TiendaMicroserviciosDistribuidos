@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import ProductService from '../services/product.service';
 import ProductRepository from '../repositories/product.repository';
-import type { Product } from '../models/product.ts';
+import type { Product } from '../models/productInterface';
 
 type CreateProductBody = Omit<Product, 'id'>;
 type UpdateProductBody = Partial<CreateProductBody>;
