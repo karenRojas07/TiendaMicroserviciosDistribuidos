@@ -1,96 +1,74 @@
-import type { User } from '../models/user';
-import { pool } from '../db/mysql';
-
+import User, { IUserAttributes } from '../models/userEntity';
+import { UniqueConstraintError } from 'sequelize';
 
 class UserRepository {
-  async getAll(): Promise<User[]> {
-    console.log('consultando base de datos...');
-    const [rows] = await pool.query(
-      'SELECT email, password FROM users ORDER BY email'
-    );
-    return rows as User[];
+  async getAll(): Promise<Pick<IUserAttributes, 'id' | 'email'>[]> {
+    // No exponemos password en listados
+    return await User.findAll({
+      attributes: ['id', 'email'],
+      raw: true,
+    });
   }
 
-  async getById(id: number): Promise<User | undefined> {
-    const [rows] = await pool.query(
-      'SELECT id, email, password FROM users WHERE id = ? LIMIT 1',
-      [id]
-    );
-    const list = rows as User[];
-    return list[0];
+  async getById(id: number): Promise<Pick<IUserAttributes, 'id' | 'email'> | null> {
+    const user = await User.findByPk(id, {
+      attributes: ['id', 'email'],
+      raw: true,
+    });
+    return user ?? null;
   }
 
-  async create(userData: Omit<User, 'id'>): Promise<User> {
-    // [Inferencia] Normaliza el correo para consistencia
+  async create(userData: Omit<IUserAttributes, 'id'>): Promise<Pick<IUserAttributes, 'id' | 'email'>> {
     const email = userData.email.trim().toLowerCase();
     const password = userData.password;
 
-    // Pre-chequeo amigable
     const existing = await this.findByEmail(email);
     if (existing) {
       throw new Error('El email ya existe');
     }
 
-    // Inserta y aún así captura duplicados (condición de carrera)
     try {
-      const [res] = await pool.execute(
-        'INSERT INTO users (email, password) VALUES (?, ?)',
-        [email, password]
-      );
-      const insertId = (res as any).insertId as number;
-      return { id: insertId, email, password };
+      const user = await User.create({ email, password });
+      // Devolvemos solo id y email
+      return { id: user.id, email: user.email };
     } catch (err: any) {
-      if (err?.code === 'ER_DUP_ENTRY') {
+      if (err instanceof UniqueConstraintError) {
         throw new Error('El email ya existe');
       }
       throw err;
     }
   }
 
-  async update(id: number, userUpdate: Partial<Omit<User, 'id'>>): Promise<User | undefined> {
-    const fields: string[] = [];
-    const values: any[] = [];
+  async update(
+    id: number,
+    userUpdate: Partial<Omit<IUserAttributes, 'id'>>
+  ): Promise<Pick<IUserAttributes, 'id' | 'email'> | null> {
+    const user = await User.findByPk(id);
+    if (!user) return null;
 
-    if (userUpdate.email !== undefined) {
-      fields.push('email = ?');
-      values.push(userUpdate.email);
+    if (typeof userUpdate.email === 'string') {
+      user.email = userUpdate.email.trim().toLowerCase();
     }
-    if (userUpdate.password !== undefined) {
-      fields.push('password = ?');
-      values.push(userUpdate.password);
+    if (typeof userUpdate.password === 'string') {
+      user.password = userUpdate.password;
     }
+    await user.save();
 
-    if (fields.length === 0) {
-      return this.getById(id); // nada que actualizar
-    }
-
-    values.push(id);
-    const [res] = await pool.execute(
-      `UPDATE users SET ${fields.join(', ')} WHERE id = ?`,
-      values
-    ) as any;
-
-    if ((res as any).affectedRows === 0) return undefined;
-    return this.getById(id);
+    return { id: user.id, email: user.email };
   }
 
   async delete(id: number): Promise<boolean> {
-    const [res] = await pool.execute(
-      'DELETE FROM users WHERE id = ?',
-      [id]
-    ) as any;
-    return (res as any).affectedRows > 0;
-  }  
+    const deleted = await User.destroy({ where: { id } });
+    return deleted > 0;
+  }
 
-  async findByEmail(email: string): Promise<User | undefined> {
-    const [rows] = await pool.query(
-      'SELECT id, email, password FROM users WHERE email = ? LIMIT 1',
-      [email]
-    );
-    const list = rows as User[];
-    return list[0];
+  async findByEmail(email: string): Promise<IUserAttributes | null> {
+    const user = await User.findOne({
+      where: { email },
+      raw: true,
+    });
+    return user as IUserAttributes | null;
   }
 }
-
 
 export default UserRepository;
