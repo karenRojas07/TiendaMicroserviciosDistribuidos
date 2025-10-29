@@ -1,4 +1,4 @@
-import { Order, OrderCreationAttributes } from '../models/orderEntity';
+import { Order, OrderCreationAttributes } from '../../domain/models/orderEntity';
 import { OrderRepository } from '../../domain/order.repository.port';
 
 export class SQLiteOrderRepository implements OrderRepository {

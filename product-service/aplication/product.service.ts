@@ -1,4 +1,4 @@
-import type { Product } from '../infraestructure/models/productInterface.js';
+import type { Product } from '../domain/models/productInterface.js';
 import type { ProductRepositoryPort } from '../domain/product.repository.port.js';
 
 class ProductService {

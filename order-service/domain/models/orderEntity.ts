@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import sequelize from '../db/sequelize';
+import sequelize from '../../infraestructure/db/sequelize';
 
 // Definir la interfaz para los atributos de una orden
 export interface OrderAttributes {

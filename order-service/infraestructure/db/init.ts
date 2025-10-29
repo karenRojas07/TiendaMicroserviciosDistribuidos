@@ -1,5 +1,5 @@
 import sequelize from './sequelize';
-import { Order } from '../models/orderEntity';
+import { Order } from '../../domain/models/orderEntity';
 
 export const initDb = async () => {
   try {
