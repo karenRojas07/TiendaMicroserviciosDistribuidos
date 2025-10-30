@@ -10,6 +10,8 @@ Alexander Niño Rodríguez
 
 Instalar dependencias en cada servicio (order-service, product-service, user-service) y en el gateway (APPTIENDA):
 
+npm install mysql2 --save
+
 npm install
 
 ------------------Levantar un contenedor en DOCKER DESKTOP y descargar la imagen mysql:latest------------

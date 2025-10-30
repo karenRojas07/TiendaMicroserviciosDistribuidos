@@ -1,0 +1,13 @@
+2025/10/30 05:20:22 [emerg] 1#1: host not found in upstream "product-service:3002" in /etc/nginx/nginx.conf:8
+2025/10/30 05:20:28 [emerg] 1#1: host not found in upstream "product-service:3002" in /etc/nginx/nginx.conf:8
+2025/10/30 05:20:35 [emerg] 1#1: host not found in upstream "product-service:3002" in /etc/nginx/nginx.conf:8
+2025/10/30 05:20:41 [emerg] 1#1: host not found in upstream "product-service:3002" in /etc/nginx/nginx.conf:8
+2025/10/30 05:20:50 [emerg] 1#1: host not found in upstream "product-service:3002" in /etc/nginx/nginx.conf:8
+2025/10/30 05:20:56 [emerg] 1#1: host not found in upstream "product-service:3002" in /etc/nginx/nginx.conf:8
+2025/10/30 05:21:03 [emerg] 1#1: host not found in upstream "product-service:3002" in /etc/nginx/nginx.conf:8
+2025/10/30 05:21:13 [emerg] 1#1: host not found in upstream "product-service:3002" in /etc/nginx/nginx.conf:8
+2025/10/30 05:21:33 [emerg] 1#1: host not found in upstream "product-service:3002" in /etc/nginx/nginx.conf:8
+2025/10/30 05:22:05 [emerg] 1#1: host not found in upstream "product-service:3002" in /etc/nginx/nginx.conf:8
+2025/10/30 05:23:06 [emerg] 1#1: host not found in upstream "product-service:3002" in /etc/nginx/nginx.conf:8
+2025/10/30 05:30:08 [error] 31#31: *6 connect() failed (111: Connection refused) while connecting to upstream, client: 172.20.0.1, server: localhost, request: "GET /orders HTTP/1.1", upstream: "http://172.20.0.3:3001/orders", host: "localhost:3000"
+2025/10/30 05:32:13 [error] 31#31: *9 connect() failed (111: Connection refused) while connecting to upstream, client: 172.20.0.1, server: localhost, request: "POST /orders HTTP/1.1", upstream: "http://172.20.0.3:3001/orders", host: "localhost:3000"

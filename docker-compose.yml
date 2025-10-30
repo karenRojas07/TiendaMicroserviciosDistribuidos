@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # Base de datos MySQL
+  mysql:
+    image: mysql:latest
+    container_name: mysqlTienda
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: sa
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: tiendaApp
+    ports:
+      - "3007:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./appTiendaBD.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - apptienda-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  # Microservicio de Órdenes
+  order-service:
+    build:
+      context: ./order-service
+      dockerfile: Dockerfile
+    container_name: order-service
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=sa
+      - DB_PASSWORD=root
+      - DB_NAME=tiendaApp
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - apptienda-network
+    restart: unless-stopped
+
+  # Nginx API Gateway
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-gateway
+    ports:
+      - "3000:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      - order-service
+    networks:
+      - apptienda-network
+    restart: unless-stopped
+
+networks:
+  apptienda-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
